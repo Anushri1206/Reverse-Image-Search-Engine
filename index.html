@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+ <head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script type='text/javascript'>
+    function preview_image(event) 
+    {
+     var reader = new FileReader();
+     reader.onload = function()
+     {
+      var output = document.getElementById('output_image');
+      output.src = reader.result;
+     }
+     reader.readAsDataURL(event.target.files[0]);
+    }
+    </script>
+  <style>
+
+  .bg-1 {
+    background-image: url("/static/bg.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: inline-block
+	  height: 100%;
+  }
+  img {
+  border: 1px solid #ddd; /* Gray border */
+  border-radius: 4px;  /* Rounded border */
+  padding: 5px; /* Some padding */
+  display: block;
+  max-width:500px;
+  max-height:300px;
+  width: auto;
+  height: auto;
+}
+img:hover {
+  box-shadow: 0 0 4px 1px rgba(6, 0, 85, 0.925);
+}
+.header {
+  padding: 20px;
+  text-align: center;
+  background: #5c25c2;
+  color: white;
+  font-size: 50px;
+}
+img.animated-gif{
+  width: 8%;
+  height: auto;
+  float: left;
+}
+
+hr {width: 1250px;margin-left: auto;margin-right: auto;height: 5px;background-color:rgb(3, 11, 58);}
+
+  </style>
+</head>
+       <body class="container-fluid bg-1 text-center">
+   
+        <img class = "animated-gif"  src="/static/FarmTwo.gif" alts="description of gif" /> 
+        <div style = "font-family: 'Cursive', Lucida Handwriting;  display:float; font-size: 100px; color:black"> 
+          <center>
+          <h1>Reverse Image Search Engine</h1> 
+          </div>
+            <br>
+            <br>
+            <h2><b> Enter Input Image </b></h2> 
+            <center>
+              <form method="POST" enctype="multipart/form-data">
+                <input type="file" accept="image/*" name="query_img" onchange="preview_image(event)" required/>
+                <br>
+                <label> Preview Image</label>
+                <img id="output_image"/>
+                <br>
+                <label>Choose number of images:</label>
+                <select name="number_images" id="number_images" required>
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="15">15</option>
+                  <option value="20">20</option>
+                </select>
+                <br/>
+                <br>
+                <input type="submit" class="btn btn-primary">
+            </form>
+            <br>
+            <h2><b>Query:</b></h2>
+            {% if query_path %}
+            <img src="{{ query_path }}" width="300px" class = "img:hover">
+            {% endif %}
+            
+            <h2><b>Results:</b></h2>
+            {% for result in results %}
+            <figure style="float: left; margin-right: 20px; margin-left: 20px; margin-bottom: 20px;">
+                <a href = "{{ result[2] }}" target = "_blank">
+		<img src="{{ result[1] }}" class = "img:hover">
+		</a>
+                <figcaption>{{ "Score: {:.3f}".format(result[0]) }}</figcaption>
+            </figure>
+            {% endfor %}
+          </center>
+            
+        </div>
+    </body>
+</html>
